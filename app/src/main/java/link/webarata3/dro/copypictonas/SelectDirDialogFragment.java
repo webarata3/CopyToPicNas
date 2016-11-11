@@ -5,13 +5,17 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectDirDialogFragment extends DialogFragment {
+public class SelectDirDialogFragment extends DialogFragment  {
     private static final String CURRENT_DIR = "current_dir";
+
+    private ArrayAdapter<String> adapter;
 
     public static SelectDirDialogFragment newInstance(Fragment target, String initDir) {
         SelectDirDialogFragment fragment = new SelectDirDialogFragment();
@@ -29,22 +33,15 @@ public class SelectDirDialogFragment extends DialogFragment {
         Bundle args = getArguments();
         String currentDir = args.getString(CURRENT_DIR);
 
-        // <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />をつけないと動かない
-        File[] fileList = new File(currentDir).listFiles();
+        ListView listView = new ListView(getActivity());
+        this.adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        listView.setAdapter(this.adapter);
 
-        List<String> fileNameList = new ArrayList<>();
-        fileNameList.add("..（上の階層）");
-        for (File file : fileList) {
-            if (file.isFile()) continue;
-            String fileName = file.getName();
-            fileNameList.add(fileName);
-        }
+        updateView();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(currentDir)
-            .setItems(fileNameList.toArray(new String[fileNameList.size()]), (dialog, value) -> {
-                getDialog().setTitle("あいうえお");
-            })
+            .setView(listView)
             .setPositiveButton("決定", (dialog, value) -> {
 
             })
@@ -55,5 +52,21 @@ public class SelectDirDialogFragment extends DialogFragment {
             });
 
         return builder.create();
+    }
+
+    private void updateView() {
+        adapter.clear();
+
+        Bundle bundle = this.getArguments();
+        String currentDir = bundle.getString(CURRENT_DIR);
+
+        // <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />をつけないと動かない
+        File[] fileList = new File(currentDir).listFiles();
+
+        List<String> fileNameList = new ArrayList<>();
+        adapter.add("..（上の階層）");
+        for (String fileName : fileNameList) {
+            adapter.add(fileName);
+        }
     }
 }

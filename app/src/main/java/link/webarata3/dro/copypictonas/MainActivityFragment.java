@@ -16,7 +16,10 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.Date;
 
-public class MainActivityFragment extends Fragment implements View.OnClickListener, DirSelectDialog.OnDirSelectDialogListener {
+import link.webarata3.dro.copypictonas.util.FileSizeUtil;
+
+public class MainActivityFragment extends Fragment
+    implements View.OnClickListener, DirSelectDialog.OnDirSelectDialogListener {
 
     private TextInputLayout ipTextInputLayout;
     private AppCompatEditText ipEditText;
@@ -42,7 +45,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ipTextInputLayout =(TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
+        ipTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
         ipEditText = (AppCompatEditText) fragment.findViewById(R.id.ipEditText);
         toDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.toDirTextInputLayout);
         toDirEditText = (AppCompatEditText) fragment.findViewById(R.id.toDirEditText);
@@ -68,16 +71,9 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.selectDirButton:
-//                SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(this,
-//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-//                selectDirDialogFragment.show(getFragmentManager(), "");
-                DirSelectDialog dialog = new DirSelectDialog(getActivity());
-                dialog.setOnDirSelectDialogListener(this);
-
-                // 表示
-                dialog.show(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
+                selectDirButton();
                 break;
             case R.id.copyButton:
                 String timestamp = DateFormat.format("yyyyMMddHHmmss", new Date())
@@ -96,6 +92,12 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
                 break;
         }
+    }
+
+    private void selectDirButton() {
+        SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(this,
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+        selectDirDialogFragment.show(getFragmentManager(), "");
     }
 
     private Long calcDirSize() {

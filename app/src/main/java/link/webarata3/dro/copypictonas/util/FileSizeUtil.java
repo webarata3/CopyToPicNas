@@ -1,4 +1,4 @@
-package link.webarata3.dro.copypictonas;
+package link.webarata3.dro.copypictonas.util;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
