@@ -3,12 +3,14 @@ package link.webarata3.dro.copypictonas;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import java.util.Date;
 import link.webarata3.dro.copypictonas.util.FileSizeUtil;
 
 public class MainActivityFragment extends Fragment
-    implements View.OnClickListener, DirSelectDialog.OnDirSelectDialogListener {
+    implements View.OnClickListener, SelectDirDialogFragment.SelectDirListener {
 
     private TextInputLayout ipTextInputLayout;
     private AppCompatEditText ipEditText;
@@ -95,8 +97,9 @@ public class MainActivityFragment extends Fragment
     }
 
     private void selectDirButton() {
-        SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(this,
+        SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+        selectDirDialogFragment.setListener(this);
         selectDirDialogFragment.show(getFragmentManager(), "");
     }
 
@@ -132,7 +135,7 @@ public class MainActivityFragment extends Fragment
     }
 
     @Override
-    public void onClickDirSelect(File file) {
-        fromDirEditText.setText(file.getAbsolutePath());
+    public void onSelect(@NonNull String dir) {
+        Log.i("##########", dir);
     }
 }
