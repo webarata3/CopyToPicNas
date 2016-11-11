@@ -10,9 +10,32 @@
  tools:showIn="@layout/activity_main">
 
  <android.support.design.widget.TextInputLayout
-  android:id="@+id/ipTextInputLayout"
+  android:id="@+id/fromDirTextInputLayout"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
+
+  <android.support.v7.widget.AppCompatEditText
+   android:id="@+id/fromDirEditText"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:layout_alignParentStart="true"
+   android:layout_alignParentTop="true"
+   android:hint="@string/label.from_dir" />
+ </android.support.design.widget.TextInputLayout>
+
+ <android.support.v7.widget.AppCompatButton
+  android:id="@+id/selectDirButton"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_below="@+id/fromDirTextInputLayout"
+  android:layout_centerHorizontal="true"
+  android:text="@string/select_from_dir" />
+
+ <android.support.design.widget.TextInputLayout
+  android:id="@+id/ipTextInputLayout"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_below="@+id/selectDirButton">
 
   <android.support.v7.widget.AppCompatEditText
    android:id="@+id/ipEditText"
@@ -70,34 +93,11 @@
    android:hint="@string/label.password" />
  </android.support.design.widget.TextInputLayout>
 
- <android.support.design.widget.TextInputLayout
-  android:id="@+id/fromDirTextInputLayout"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_below="@+id/passowrdTextInputLayout">
-
-  <android.support.v7.widget.AppCompatEditText
-   android:id="@+id/fromDirEditText"
-   android:layout_width="match_parent"
-   android:layout_height="wrap_content"
-   android:layout_alignParentStart="true"
-   android:layout_alignParentTop="true"
-   android:hint="@string/label.from_dir" />
- </android.support.design.widget.TextInputLayout>
-
- <android.support.v7.widget.AppCompatButton
-  android:id="@+id/selectDirButton"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_below="@+id/fromDirTextInputLayout"
-  android:layout_centerHorizontal="true"
-  android:text="@string/select_from_dir" />
-
  <android.support.v7.widget.AppCompatTextView
   android:id="@+id/textView"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_below="@+id/selectDirButton"
+  android:layout_below="@+id/passowrdTextInputLayout"
   android:layout_marginTop="@dimen/activity_vertical_margin"
   android:text="@string/label.copy_note" />
 
