@@ -2,9 +2,7 @@ package link.webarata3.dro.copypictonas;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,29 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * http://alldaysyu-ya.blogspot.jp/2013/09/android_13.html<br>
- * から一部変更 <br>
- * ディレクトリ選択ダイアログ
- */
-public class DirSelectDialog extends Activity implements OnClickListener {
-    /**
-     * アクティビティ
-     */
-    private Context context = null;
+    *http://alldaysyu-ya.blogspot.jp/2013/09/android_13.html<br>
+    *から一部変更<br>
+    *ディレクトリ選択ダイアログ
+    */
+public class DirSelectDialog extends Activity implements DialogInterface.OnClickListener {
+    /** アクティビティ*/
+    private Activity activity = null;
 
-    /**
-     * リスナー
-     */
+    /** リスナー */
     private OnDirSelectDialogListener listener = null;
 
-    /**
-     * ファイル情報
-     */
+    /** ファイル情報 */
     private File fileData = null;
 
-    /**
-     * 表示中のファイル情報リスト
-     */
+    /** 表示中のファイル情報リスト */
     private List<File> viewFileDataList = null;
 
     /**
@@ -44,8 +34,8 @@ public class DirSelectDialog extends Activity implements OnClickListener {
      *
      * @param activity アクティビティ
      */
-    public DirSelectDialog(Context context) {
-        this.context = context;
+    public DirSelectDialog(Activity activity) {
+        this.activity = activity;
     }
 
     /**
@@ -67,9 +57,9 @@ public class DirSelectDialog extends Activity implements OnClickListener {
     public void show(final String dirPath) {
         this.fileData = new File(dirPath);
         File[] fileArray = this.fileData.listFiles();
-        List<String> nameList = new ArrayList<>();
+        List<String> nameList = new ArrayList<String>();
         if (fileArray != null) {
-            Map<String, File> map = new HashMap<>();
+            Map<String, File> map = new HashMap<String, File>();
             for (File file : fileArray) {
                 if (file.isDirectory()) {
                     nameList.add(file.getName() + "/");
@@ -77,17 +67,17 @@ public class DirSelectDialog extends Activity implements OnClickListener {
                 }
             }
             Collections.sort(nameList);
-            this.viewFileDataList = new ArrayList<>();
+            this.viewFileDataList = new ArrayList<File>();
             for (int i = 0; i < nameList.size(); i++) {
                 this.viewFileDataList.add(map.get(nameList.get(i)));
             }
         }
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.activity);
         dialog.setTitle(dirPath);
         // dialog.setIcon(R.drawable.directory);
         dialog.setItems(nameList.toArray(new String[nameList.size()]), this);
-        dialog.setPositiveButton("決定", new OnClickListener() {
+        dialog.setPositiveButton("決定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int value) {
                 DirSelectDialog.this.listener
@@ -95,7 +85,7 @@ public class DirSelectDialog extends Activity implements OnClickListener {
             }
         });
 
-        dialog.setNeutralButton("上へ", new OnClickListener() {
+        dialog.setNeutralButton("上へ", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int value) {
@@ -114,7 +104,7 @@ public class DirSelectDialog extends Activity implements OnClickListener {
         });
 
         dialog.setNegativeButton("キャンセル",
-            new OnClickListener() {
+            new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int value) {
                     DirSelectDialog.this.listener.onClickDirSelect(null);

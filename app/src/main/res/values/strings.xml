@@ -2,11 +2,12 @@
  <string name="app_name">NASへファイルをコピーする</string>
  <string name="action_settings">設定</string>
  <string name="label.ip">NASのIPアドレス</string>
- <string name="label.to_folder">NAS上のコピー先フォルダ</string>
+ <string name="label.to_dir">NAS上のコピー先フォルダ</string>
  <string name="label.user_id">NASのユーザーID</string>
  <string name="label.password">NASのパスワード（保存されません）</string>
- <string name="label.from_folder">コピー元のフォルダ</string>
+ <string name="label.from_dir">コピー元のフォルダ</string>
  <string name="label.copy_note">コピー元のフォルダから、NAS上のフォルダへファイルがコピーされます。NAS上のフォルダには、タイムスタンプのフォルダを作りコピーします</string>
 
  <string name="button.copy">コピーする</string>
+ <string name="select_from_dir">コピー元フォルダの選択</string>
 </resources>

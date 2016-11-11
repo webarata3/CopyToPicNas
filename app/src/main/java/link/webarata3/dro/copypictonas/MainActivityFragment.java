@@ -3,17 +3,36 @@ package link.webarata3.dro.copypictonas;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
+import java.util.Date;
 
 public class MainActivityFragment extends Fragment implements View.OnClickListener, DirSelectDialog.OnDirSelectDialogListener {
 
-    AppCompatButton selectDir;
+    private TextInputLayout ipTextInputLayout;
+    private AppCompatEditText ipEditText;
+    private TextInputLayout toDirTextInputLayout;
+    private AppCompatEditText toDirEditText;
+
+    private TextInputLayout userIdTextLayoutInput;
+    private AppCompatEditText userIdEditText;
+    private TextInputLayout passwordTextInputLayout;
+    private AppCompatEditText passwordEditText;
+
+    private TextInputLayout fromDirTextInputLayout;
+    private AppCompatEditText fromDirEditText;
+    private AppCompatButton selectDirButton;
+    private AppCompatButton copyButton;
+    private AppCompatTextView dirInfo;
 
     public MainActivityFragment() {
     }
@@ -22,8 +41,22 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_main, container, false);
-        AppCompatButton selectDir = (AppCompatButton) fragment.findViewById(R.id.selectDir);
-        selectDir.setOnClickListener(this);
+
+        ipTextInputLayout =(TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
+        ipEditText = (AppCompatEditText) fragment.findViewById(R.id.ipEditText);
+        toDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.toDirTextInputLayout);
+        toDirEditText = (AppCompatEditText) fragment.findViewById(R.id.toDirEditText);
+        userIdTextLayoutInput = (TextInputLayout) fragment.findViewById(R.id.userIdTextLayoutInput);
+        userIdEditText = (AppCompatEditText) fragment.findViewById(R.id.userIdEditText);
+        passwordTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.passowrdTextInputLayout);
+        passwordEditText = (AppCompatEditText) fragment.findViewById(R.id.passwordEditText);
+        fromDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.fromDirTextInputLayout);
+        fromDirEditText = (AppCompatEditText) fragment.findViewById(R.id.fromDirEditText);
+
+        dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
+
+        fragment.findViewById(R.id.selectDirButton).setOnClickListener(this);
+        fragment.findViewById(R.id.copyButton).setOnClickListener(this);
 
         return fragment;
     }
@@ -36,18 +69,68 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.selectDir:
-                DirSelectDialog dialog = new DirSelectDialog(this.getContext());
+            case R.id.selectDirButton:
+//                SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(this,
+//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+//                selectDirDialogFragment.show(getFragmentManager(), "");
+                DirSelectDialog dialog = new DirSelectDialog(getActivity());
                 dialog.setOnDirSelectDialogListener(this);
 
                 // 表示
-                dialog.show(Environment.getExternalStorageDirectory().getPath());
+                dialog.show(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
+                break;
+            case R.id.copyButton:
+                String timestamp = DateFormat.format("yyyyMMddHHmmss", new Date())
+                    .toString();
+                String serverPath = ipEditText.getText().toString();
+                if (!serverPath.endsWith("/")) {
+                    serverPath = serverPath + "/";
+                }
+                CopySetting cs = new CopySetting(fromDirEditText.getText().toString(),
+                    serverPath + timestamp + "/", userIdEditText.getText()
+                    .toString(), passwordEditText.getText().toString()
+                );
+                RefTask refTask = new RefTask(view.getContext(), cs);
+                refTask.setFileSize((int) (calcDirSize() / 1024));
+                refTask.execute();
+
                 break;
         }
     }
 
+    private Long calcDirSize() {
+        File file = new File(fromDirEditText.getText().toString());
+
+        if (!file.exists()) {
+            fromDirEditText.setText("ディレクトリが存在しません");
+            return 0L;
+        }
+        if (!file.isDirectory()) {
+            fromDirEditText.setText("ディレクトリではありません");
+            return 0L;
+        }
+
+        File[] files = file.listFiles();
+        int fileCount = 0;
+        long fileSize = 0;
+        for (File localFile : files) {
+            if (!localFile.isDirectory()) {
+                fileCount++;
+                try {
+                    fileSize += localFile.length();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        dirInfo.setText(String.format("ファイル数: %1$d サイズ: %2$s",
+            fileCount, FileSizeUtil.getFileSizeForView(fileSize)));
+
+        return fileSize;
+    }
+
     @Override
     public void onClickDirSelect(File file) {
-
+        fromDirEditText.setText(file.getAbsolutePath());
     }
 }
