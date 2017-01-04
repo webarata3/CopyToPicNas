@@ -32,8 +32,9 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
 
         Bundle args = new Bundle();
         // ディレクトリの正規化（/以外で、最後が/であれば/を取る）
-        if (!initDir.equals("/") && initDir.lastIndexOf("/") == initDir.length()) {
-            initDir = initDir.substring(0, initDir.lastIndexOf("/"));
+        if (!initDir.equals(File.pathSeparator)
+            && initDir.lastIndexOf(File.pathSeparator) == initDir.length()) {
+            initDir = initDir.substring(0, initDir.lastIndexOf(File.pathSeparator));
         }
 
         args.putString(CURRENT_DIR, initDir);
@@ -98,7 +99,7 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
             if (!dir.equals("/")) {
                 dir = dir + File.separator;
             }
-            dir = dir + this.fileList[position - 1].getName();
+            dir = dir + fileList[position - 1].getName();
             File file = new File(dir);
             if (file.isDirectory()) {
                 // ディレクトリの場合はその中へ移動
@@ -113,9 +114,8 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
     private void updateView() {
         adapter.clear();
 
-        Bundle args = this.getArguments();
-        String currentDir = args.getString(CURRENT_DIR);
-        Objects.requireNonNull(currentDir);
+        Bundle args = getArguments();
+        String currentDir = Objects.requireNonNull(args.getString(CURRENT_DIR));
 
         // <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />をつけないと動かない
         fileList = new File(currentDir).listFiles();

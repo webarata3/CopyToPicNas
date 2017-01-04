@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -24,17 +24,17 @@ public class MainActivityFragment extends Fragment
     implements View.OnClickListener, SelectDirDialogFragment.SelectDirListener {
 
     private TextInputLayout ipTextInputLayout;
-    private AppCompatEditText ipEditText;
+    private TextInputEditText ipEditText;
     private TextInputLayout toDirTextInputLayout;
-    private AppCompatEditText toDirEditText;
+    private TextInputEditText toDirEditText;
 
     private TextInputLayout userIdTextLayoutInput;
-    private AppCompatEditText userIdEditText;
+    private TextInputEditText userIdEditText;
     private TextInputLayout passwordTextInputLayout;
-    private AppCompatEditText passwordEditText;
+    private TextInputEditText passwordEditText;
 
     private TextInputLayout fromDirTextInputLayout;
-    private AppCompatEditText fromDirEditText;
+    private TextInputEditText fromDirEditText;
     private AppCompatButton selectDirButton;
     private AppCompatButton copyButton;
     private AppCompatTextView dirInfo;
@@ -48,15 +48,15 @@ public class MainActivityFragment extends Fragment
         View fragment = inflater.inflate(R.layout.fragment_main, container, false);
 
         ipTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
-        ipEditText = (AppCompatEditText) fragment.findViewById(R.id.ipEditText);
+        ipEditText = (TextInputEditText) fragment.findViewById(R.id.ipEditText);
         toDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.toDirTextInputLayout);
-        toDirEditText = (AppCompatEditText) fragment.findViewById(R.id.toDirEditText);
+        toDirEditText = (TextInputEditText) fragment.findViewById(R.id.toDirEditText);
         userIdTextLayoutInput = (TextInputLayout) fragment.findViewById(R.id.userIdTextLayoutInput);
-        userIdEditText = (AppCompatEditText) fragment.findViewById(R.id.userIdEditText);
+        userIdEditText = (TextInputEditText) fragment.findViewById(R.id.userIdEditText);
         passwordTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.passowrdTextInputLayout);
-        passwordEditText = (AppCompatEditText) fragment.findViewById(R.id.passwordEditText);
+        passwordEditText = (TextInputEditText) fragment.findViewById(R.id.passwordEditText);
         fromDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.fromDirTextInputLayout);
-        fromDirEditText = (AppCompatEditText) fragment.findViewById(R.id.fromDirEditText);
+        fromDirEditText = (TextInputEditText) fragment.findViewById(R.id.fromDirEditText);
 
         dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
 
@@ -80,14 +80,20 @@ public class MainActivityFragment extends Fragment
             case R.id.copyButton:
                 String timestamp = DateFormat.format("yyyyMMddHHmmss", new Date())
                     .toString();
-                String serverPath = ipEditText.getText().toString();
+                String ip = ipEditText.getText().toString();
+                ip = ip.endsWith("/") ? ip : ip + "/";
+                String serverPath = toDirEditText.getText().toString();
                 if (!serverPath.endsWith("/")) {
                     serverPath = serverPath + "/";
                 }
-                CopySetting cs = new CopySetting(fromDirEditText.getText().toString(),
-                    serverPath + timestamp + "/", userIdEditText.getText()
-                    .toString(), passwordEditText.getText().toString()
+                CopySetting cs = new CopySetting(
+                    fromDirEditText.getText().toString(),
+                    ip + serverPath + timestamp + "/",
+                    userIdEditText.getText().toString(),
+                    passwordEditText.getText().toString()
                 );
+                Log.i("########", cs.getServerPath());
+
                 RefTask refTask = new RefTask(view.getContext(), cs);
                 refTask.setFileSize((int) (calcDirSize() / 1024));
                 refTask.execute();
@@ -136,6 +142,7 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void onSelect(@NonNull String dir) {
-        Log.i("##########", dir);
+        fromDirEditText.setText(dir);
+        calcDirSize();
     }
 }
