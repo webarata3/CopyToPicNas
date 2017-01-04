@@ -90,6 +90,7 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
                 if (dir.equals("")) {
                     dir = dir + File.separator;
                 }
+                // 画面回転で状態を復元するため、状態をBundleに保存しておく。
                 args.putString(CURRENT_DIR, dir);
                 dialog.setTitle(dir);
 
@@ -103,6 +104,7 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
             File file = new File(dir);
             if (file.isDirectory()) {
                 // ディレクトリの場合はその中へ移動
+                // 画面回転で状態を復元するため、状態をBundleに保存しておく。
                 args.putString(CURRENT_DIR, dir);
                 dialog.setTitle(dir);
 
