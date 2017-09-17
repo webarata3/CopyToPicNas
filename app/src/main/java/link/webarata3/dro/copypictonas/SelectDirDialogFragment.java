@@ -131,7 +131,7 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
             for (File file : allFileList) {
                 if (!file.isDirectory()) continue;
                 Log.i("#+++", file.getName());
-               // if (!file.canRead()) continue;
+                // if (!file.canRead()) continue;
                 Log.i("#+++", "readable");
                 //if (!file.canExecute()) continue;
                 readableFileList.add(file);

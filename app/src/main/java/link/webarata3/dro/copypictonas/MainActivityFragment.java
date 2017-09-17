@@ -121,8 +121,11 @@ public class MainActivityFragment extends Fragment
     }*/
 
     public void onClickSelectDirButton() {
-        SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+        String fromDir = fromDirEditText.getText().toString();
+        if (fromDir.isEmpty()) {
+            fromDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        }
+        SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(fromDir);
         selectDirDialogFragment.setListener(this);
         selectDirDialogFragment.show(getFragmentManager(), "");
     }
