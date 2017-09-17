@@ -5,13 +5,16 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 // 参考: http://www.milk-island.net/document/android/fileselectdialog/
@@ -120,7 +123,21 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
         String currentDir = Objects.requireNonNull(args.getString(CURRENT_DIR));
 
         // <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />をつけないと動かない
-        fileList = new File(currentDir).listFiles();
+        // 読み込み可能ファイル／フォルダーのみ追加する
+        File[] allFileList = new File(currentDir).listFiles();
+        List<File> readableFileList = new ArrayList<File>();
+        Log.i("#########", currentDir + " : " + allFileList + "");
+        if (allFileList != null) {
+            for (File file : allFileList) {
+                if (!file.isDirectory()) continue;
+                Log.i("#+++", file.getName());
+               // if (!file.canRead()) continue;
+                Log.i("#+++", "readable");
+                //if (!file.canExecute()) continue;
+                readableFileList.add(file);
+            }
+        }
+        fileList = readableFileList.toArray(new File[readableFileList.size()]);
 
         Arrays.sort(fileList, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
