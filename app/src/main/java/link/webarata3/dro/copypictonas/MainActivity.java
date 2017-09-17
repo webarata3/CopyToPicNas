@@ -6,7 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements MainActivityFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,4 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onClickSelectDirButton() {
+        MainActivityFragment mainActivityFragment =
+            (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentMain);
+        mainActivityFragment.onClickSelectDirButton();
+    }
+
 }

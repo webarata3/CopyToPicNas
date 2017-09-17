@@ -23,11 +23,18 @@
    android:hint="@string/label.from_dir" />
  </android.support.design.widget.TextInputLayout>
 
+ <android.support.v7.widget.AppCompatTextView
+  android:id="@+id/dirInfo"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_below="@+id/fromDirTextInputLayout"
+  android:layout_marginTop="@dimen/activity_vertical_margin" />
+
  <android.support.v7.widget.AppCompatButton
   android:id="@+id/selectDirButton"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_below="@+id/fromDirTextInputLayout"
+  android:layout_below="@+id/dirInfo"
   android:layout_centerHorizontal="true"
   android:text="@string/select_from_dir" />
 
@@ -108,11 +115,4 @@
   android:layout_below="@+id/textView"
   android:layout_centerHorizontal="true"
   android:text="@string/button.copy" />
-
- <android.support.v7.widget.AppCompatTextView
-  android:id="@+id/dirInfo"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_below="@+id/copyButton"
-  android:layout_marginTop="@dimen/activity_vertical_margin" />
 </RelativeLayout>

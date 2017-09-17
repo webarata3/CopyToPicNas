@@ -9,19 +9,17 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
-import java.util.Date;
 
 import link.webarata3.dro.copypictonas.util.FileSizeUtil;
 
 public class MainActivityFragment extends Fragment
-    implements View.OnClickListener, SelectDirDialogFragment.SelectDirListener {
+    implements SelectDirDialogFragment.SelectDirListener {
 
     private TextInputLayout ipTextInputLayout;
     private TextInputEditText ipEditText;
@@ -39,7 +37,13 @@ public class MainActivityFragment extends Fragment
     private AppCompatButton copyButton;
     private AppCompatTextView dirInfo;
 
+    private OnFragmentInteractionListener onFragmentInteractionListener;
+
     public MainActivityFragment() {
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onClickSelectDirButton();
     }
 
     @Override
@@ -60,8 +64,10 @@ public class MainActivityFragment extends Fragment
 
         dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
 
-        fragment.findViewById(R.id.selectDirButton).setOnClickListener(this);
-        fragment.findViewById(R.id.copyButton).setOnClickListener(this);
+        fragment.findViewById(R.id.selectDirButton).setOnClickListener(view -> {
+            onFragmentInteractionListener.onClickSelectDirButton();
+        });
+
 
         return fragment;
     }
@@ -69,9 +75,21 @@ public class MainActivityFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        onFragmentInteractionListener = null;
+    }
+
+    /*
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.selectDirButton:
@@ -100,9 +118,9 @@ public class MainActivityFragment extends Fragment
 
                 break;
         }
-    }
+    }*/
 
-    private void selectDirButton() {
+    public void onClickSelectDirButton() {
         SelectDirDialogFragment selectDirDialogFragment = SelectDirDialogFragment.newInstance(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
         selectDirDialogFragment.setListener(this);
@@ -125,6 +143,7 @@ public class MainActivityFragment extends Fragment
         int fileCount = 0;
         long fileSize = 0;
         for (File localFile : files) {
+            Log.d("### Files", localFile.getName());
             if (!localFile.isDirectory()) {
                 fileCount++;
                 try {

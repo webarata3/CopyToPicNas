@@ -66,11 +66,11 @@ public class SelectDirDialogFragment extends DialogFragment implements AdapterVi
             .setView(listView)
             .setPositiveButton("決定", (dialog, value) -> {
                 Bundle resultArgs = getArguments();
-                String resultDir = args.getString(CURRENT_DIR);
+                String resultDir = resultArgs.getString(CURRENT_DIR);
                 Objects.requireNonNull(resultDir);
                 listener.onSelect(resultDir);
             })
-            .setNegativeButton("キャンセル", (dialog, value) -> {
+            .setNegativeButton("キャンセル", (dialog, which) -> {
             });
 
         return builder.create();
