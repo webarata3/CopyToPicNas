@@ -8,8 +8,8 @@ public abstract class FileSizeUtil {
     private static final String[] UNIT_NAMES = {"B", "KB", "MB", "GB", "TB",
             "PB"};
 
-    private static final BigDecimal SEPARATE = new BigDecimal(1000);
-    private static BigDecimal DIVIDE = new BigDecimal(1024);
+    private static final BigDecimal SEPARATE = BigDecimal.valueOf(1000);
+    private static final BigDecimal DIVIDE = BigDecimal.valueOf(1024);
 
     /**
      * ファイルのサイズを表示用に加工して返す。
