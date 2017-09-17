@@ -157,7 +157,7 @@ public class MainActivityFragment extends Fragment
             }
         }
         dirInfo.setText(String.format("ファイル数: %1$d サイズ: %2$s",
-            fileCount, FileSizeUtil.getFileSizeForView(fileSize)));
+            fileCount, FileSizeUtil.getDisplayFileSize(fileSize)));
 
         return fileSize;
     }
