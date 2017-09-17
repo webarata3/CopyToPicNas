@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import java.io.File;
 
-import link.webarata3.dro.copypictonas.util.FileSizeUtil;
+import link.webarata3.dro.copypictonas.util.FileUtil;
 
 public class MainActivityFragment extends Fragment
     implements SelectDirDialogFragment.SelectDirListener {
@@ -157,7 +157,7 @@ public class MainActivityFragment extends Fragment
             }
         }
         dirInfo.setText(String.format("ファイル数: %1$d サイズ: %2$s",
-            fileCount, FileSizeUtil.getDisplayFileSize(fileSize)));
+            fileCount, FileUtil.getDisplayFileSize(fileSize)));
 
         return fileSize;
     }

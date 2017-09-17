@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-public abstract class FileSizeUtil {
+public abstract class FileUtil {
     private static final String[] UNIT_NAMES = {"B", "KB", "MB", "GB", "TB", "PB"};
 
     private static final BigDecimal SEPARATE = BigDecimal.valueOf(1000);

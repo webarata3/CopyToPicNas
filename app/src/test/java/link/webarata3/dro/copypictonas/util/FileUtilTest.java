@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Theories.class)
-public class FileSizeUtilTest {
+public class FileUtilTest {
     @DataPoints
     public static Fixture[] PARAMs = {
         new Fixture(999, "999B"),
@@ -42,6 +42,6 @@ public class FileSizeUtilTest {
 
     @Theory
     public void test(Fixture fixture) {
-        assertThat(FileSizeUtil.getDisplayFileSize(fixture.size), is(fixture.displaySize));
+        assertThat(FileUtil.getDisplayFileSize(fixture.size), is(fixture.displaySize));
     }
 }
