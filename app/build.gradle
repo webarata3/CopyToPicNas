@@ -45,14 +45,14 @@ dependencies {
 // レポート app/build/test-results/testDebugUnitTest/*.xml
 
 // JaCoCo
-// task jacocoTestReport
+// task testDebugUnitTest jacocoTestReport
 apply plugin: 'jacoco'
 
 jacoco {
     toolVersion = "0.7.9"
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+task jacocoTestReport(type: JacocoReport) {
     reports {
         xml.enabled = true
         html.enabled = true
@@ -65,4 +65,14 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
     executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+}
+
+// FindBugs
+// FindBugs plugin
+// task check
+// レポート build/reports/findbugs/main.xml
+apply plugin: 'findbugs'
+
+findbugs {
+    ignoreFailures = true
 }
