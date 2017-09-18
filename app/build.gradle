@@ -42,7 +42,7 @@ dependencies {
 
 // JUnit
 // task test
-// レポート app/build/test-results/testReleaseUnitTest/*.xml
+// レポート app/build/test-results/testDebugUnitTest/*.xml
 
 // JaCoCo
 // task jacocoTestReport
@@ -59,9 +59,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
         html.enabled = true
     }
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**']
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def releaseTree = fileTree(dir: "${buildDir}/intermediates/classes/release", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories = files([mainSrc])
