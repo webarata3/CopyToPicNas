@@ -16,6 +16,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -46,13 +49,6 @@ dependencies {
 
 // カバレッジ
 // JaCoCo plugin
-// task jacocoTestReport
-apply plugin: 'jacoco'
-
-jacocoTestReport {
-    reports {
-        html.enabled = true
-        xml.enabled = true
-        csv.enabled = true
-    }
-}
+// task jacocoTest
+// root/buiild.gradleに追加 classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.9.0'
+apply plugin: 'com.vanniktech.android.junit.jacoco'
