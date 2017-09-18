@@ -1,5 +1,6 @@
 package link.webarata3.dro.copypictonas.util;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -29,5 +30,48 @@ public abstract class FileUtil {
         resultSize = resultSize.round(new MathContext(3, RoundingMode.HALF_UP));
 
         return resultSize.toPlainString() + UNIT_NAMES[i];
+    }
+
+    public static class TotalInDirectory {
+        private final int count;
+        private final long size;
+
+        public TotalInDirectory(int count, long size) {
+            this.count = count;
+            this.size = size;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public long getSize() {
+            return size;
+        }
+    }
+
+    public static TotalInDirectory fileCountAndSize(File dir) {
+        if (!dir.exists()) {
+            throw new IllegalArgumentException(dir.getName() + "がありません");
+        }
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException(dir.getName() + "はディレクトリーではありません");
+        }
+
+        File[] files = dir.listFiles();
+        int fileCount = 0;
+        long fileSize = 0;
+        for (File localFile : files) {
+            if (!localFile.isDirectory()) {
+                fileCount++;
+                try {
+                    fileSize += localFile.length();
+                } catch (Exception e) {
+                    // ignore?
+                }
+            }
+        }
+
+        return new TotalInDirectory(fileCount, fileSize);
     }
 }
