@@ -49,7 +49,7 @@ dependencies {
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.7.9"
+    toolVersion = "0.7.8"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
@@ -59,12 +59,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
         html.enabled = true
     }
 
-    classDirectories = fileTree(
-        dir: './build/intermediates/classes/debug',
-        excludes: ['**/R.class',
-                   '**/R$*.class',
-                   '**/BuildConfig.class',
-        ])
-    sourceDirectories = files('src/main/java')
-    executionData = files('build/jacoco/testDebug.exec')
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
 }
