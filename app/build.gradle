@@ -25,13 +25,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
-    }
 }
 
 dependencies {
@@ -51,6 +44,8 @@ dependencies {
 // task test
 // レポート app/build/test-results/testReleaseUnitTest/*.xml
 
+// JaCoCo
+// task jacocoTestReport
 apply plugin: 'jacoco'
 
 jacoco {
