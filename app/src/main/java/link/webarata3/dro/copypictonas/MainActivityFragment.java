@@ -1,25 +1,29 @@
 package link.webarata3.dro.copypictonas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
 
+import link.webarata3.dro.copypictonas.service.FileSizeIntentService;
+import link.webarata3.dro.copypictonas.service.FileSizeResultReceiver;
 import link.webarata3.dro.copypictonas.util.FileUtil;
 
 public class MainActivityFragment extends Fragment
-    implements SelectDirDialogFragment.SelectDirListener {
+    implements SelectDirDialogFragment.SelectDirListener,
+    FileSizeResultReceiver.Receiver {
 
     private AppCompatTextView fromDirTextView;
     private AppCompatButton selectDirButton;
@@ -38,6 +42,8 @@ public class MainActivityFragment extends Fragment
     private AppCompatButton copyButton;
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
+
+    private FileSizeResultReceiver receiver;
 
     public MainActivityFragment() {
     }
@@ -68,6 +74,8 @@ public class MainActivityFragment extends Fragment
             onFragmentInteractionListener.onClickSelectDirButton();
         });
 
+        receiver = new FileSizeResultReceiver(new Handler());
+        receiver.setReceiver(this);
 
         return fragment;
     }
@@ -99,36 +107,34 @@ public class MainActivityFragment extends Fragment
         selectDirDialogFragment.show(getFragmentManager(), "");
     }
 
-    private void calcDirSize() {
-        File file = new File(fromDirTextView.getText().toString());
+    @Override
+    public void onFileSizeResult(int resultCode, Bundle resultData) {
+        int fileCount = resultData.getInt("fileCount");
+        long fileSize = resultData.getLong("fileSize");
 
-        if (!file.exists()) {
+        dirInfoTextView.setText(String.format("ファイル数: %1$d サイズ: %2$s",
+            fileCount, FileUtil.getDisplayFileSize(fileSize)));
+    }
+
+    private void calcDirSize() {
+        File dir = new File(fromDirTextView.getText().toString());
+
+        if (!dir.exists()) {
             dirInfoTextView.setText("ディレクトリが存在しません");
             return;
         }
-        if (!file.isDirectory()) {
+        if (!dir.isDirectory()) {
             dirInfoTextView.setText("ディレクトリではありません");
             return;
         }
 
         dirInfoTextView.setText("ディレクトリーサイズ計算中");
 
-        File[] files = file.listFiles();
-        int fileCount = 0;
-        long fileSize = 0;
-        for (File localFile : files) {
-            Log.d("### Files", localFile.getName());
-            if (!localFile.isDirectory()) {
-                fileCount++;
-                try {
-                    fileSize += localFile.length();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        dirInfoTextView.setText(String.format("ファイル数: %1$d サイズ: %2$s",
-            fileCount, FileUtil.getDisplayFileSize(fileSize)));
+        Intent intent = new Intent(getActivity(), FileSizeIntentService.class);
+        intent.putExtra("receiver", receiver);
+        intent.putExtra("dirName", fromDirTextView.getText().toString());
+
+        getActivity().startService(intent);
     }
 
     @Override

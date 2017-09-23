@@ -7,8 +7,10 @@ import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.File;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+
+import link.webarata3.dro.copypictonas.util.FileUtil;
 
 public class FileSizeIntentService extends IntentService {
     private static final String TAG = FileSizeIntentService.class.getSimpleName();
@@ -23,20 +25,17 @@ public class FileSizeIntentService extends IntentService {
         Objects.requireNonNull(intent);
 
         ResultReceiver receiver = intent.getParcelableExtra("receiver");
+        String dirName = intent.getStringExtra("dirName");
+
+        FileUtil.TotalInDirectory tid = FileUtil.fileCountAndSize(new File(dirName));
 
         Bundle bundle = new Bundle();
+        bundle.putInt("fileCount", tid.getCount());
+        bundle.putLong("fileSize", tid.getSize());
+        receiver.send(1, bundle);
 
-        for (int i = 0; i < 100; i++) {
-            try {
-                bundle.putInt("progress", i + 1);
-                receiver.send(1, bundle);
-
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (InterruptedException e) {
-                Log.d(TAG, "InterruptedException");
-            }
-        }
-        Log.d(TAG, "Service Stopping!");
         stopSelf();
+
+        Log.d(TAG, "Service Stopping!");
     }
 }
