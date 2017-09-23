@@ -21,6 +21,10 @@ import link.webarata3.dro.copypictonas.util.FileUtil;
 public class MainActivityFragment extends Fragment
     implements SelectDirDialogFragment.SelectDirListener {
 
+    private AppCompatTextView fromDirTextView;
+    private AppCompatButton selectDirButton;
+    private AppCompatTextView dirInfo;
+
     private TextInputLayout ipTextInputLayout;
     private TextInputEditText ipEditText;
     private TextInputLayout toDirTextInputLayout;
@@ -31,11 +35,7 @@ public class MainActivityFragment extends Fragment
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordEditText;
 
-    private TextInputLayout fromDirTextInputLayout;
-    private TextInputEditText fromDirEditText;
-    private AppCompatButton selectDirButton;
     private AppCompatButton copyButton;
-    private AppCompatTextView dirInfo;
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
@@ -51,6 +51,10 @@ public class MainActivityFragment extends Fragment
                              Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_main, container, false);
 
+        fromDirTextView = (AppCompatTextView) fragment.findViewById(R.id.fromDirTextView);
+
+        dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
+
         ipTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
         ipEditText = (TextInputEditText) fragment.findViewById(R.id.ipEditText);
         toDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.toDirTextInputLayout);
@@ -59,10 +63,6 @@ public class MainActivityFragment extends Fragment
         userIdEditText = (TextInputEditText) fragment.findViewById(R.id.userIdEditText);
         passwordTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.passowrdTextInputLayout);
         passwordEditText = (TextInputEditText) fragment.findViewById(R.id.passwordEditText);
-        fromDirTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.fromDirTextInputLayout);
-        fromDirEditText = (TextInputEditText) fragment.findViewById(R.id.fromDirEditText);
-
-        dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
 
         fragment.findViewById(R.id.selectDirButton).setOnClickListener(view -> {
             onFragmentInteractionListener.onClickSelectDirButton();
@@ -89,39 +89,8 @@ public class MainActivityFragment extends Fragment
         onFragmentInteractionListener = null;
     }
 
-    /*
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.selectDirButton:
-                selectDirButton();
-                break;
-            case R.id.copyButton:
-                String timestamp = DateFormat.format("yyyyMMddHHmmss", new Date())
-                    .toString();
-                String ip = ipEditText.getText().toString();
-                ip = ip.endsWith("/") ? ip : ip + "/";
-                String serverPath = toDirEditText.getText().toString();
-                if (!serverPath.endsWith("/")) {
-                    serverPath = serverPath + "/";
-                }
-                CopySetting cs = new CopySetting(
-                    fromDirEditText.getText().toString(),
-                    ip + serverPath + timestamp + "/",
-                    userIdEditText.getText().toString(),
-                    passwordEditText.getText().toString()
-                );
-                Log.i("########", cs.getServerPath());
-
-                RefTask refTask = new RefTask(view.getContext(), cs);
-                refTask.setFileSize((int) (calcDirSize() / 1024));
-                refTask.execute();
-
-                break;
-        }
-    }*/
-
     public void onClickSelectDirButton() {
-        String fromDir = fromDirEditText.getText().toString();
+        String fromDir = fromDirTextView.getText().toString();
         if (fromDir.isEmpty()) {
             fromDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         }
@@ -131,14 +100,14 @@ public class MainActivityFragment extends Fragment
     }
 
     private Long calcDirSize() {
-        File file = new File(fromDirEditText.getText().toString());
+        File file = new File(fromDirTextView.getText().toString());
 
         if (!file.exists()) {
-            fromDirEditText.setText("ディレクトリが存在しません");
+            fromDirTextView.setText("ディレクトリが存在しません");
             return 0L;
         }
         if (!file.isDirectory()) {
-            fromDirEditText.setText("ディレクトリではありません");
+            fromDirTextView.setText("ディレクトリではありません");
             return 0L;
         }
 
@@ -164,7 +133,7 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void onSelect(@NonNull String dir) {
-        fromDirEditText.setText(dir);
+        fromDirTextView.setText(dir);
         calcDirSize();
     }
 }

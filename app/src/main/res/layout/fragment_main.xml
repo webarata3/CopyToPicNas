@@ -9,25 +9,19 @@
  tools:context="link.webarata3.dro.copypictonas.MainActivityFragment"
  tools:showIn="@layout/activity_main">
 
- <android.support.design.widget.TextInputLayout
-  android:id="@+id/fromDirTextInputLayout"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content">
-
-  <android.support.design.widget.TextInputEditText
-   android:id="@+id/fromDirEditText"
+  <android.support.v7.widget.AppCompatTextView
+   android:id="@+id/fromDirTextView"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
    android:layout_alignParentStart="true"
    android:layout_alignParentTop="true"
    android:hint="@string/label.from_dir" />
- </android.support.design.widget.TextInputLayout>
 
  <android.support.v7.widget.AppCompatTextView
   android:id="@+id/dirInfo"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_below="@+id/fromDirTextInputLayout"
+  android:layout_below="@+id/fromDirTextView"
   android:layout_marginTop="@dimen/activity_vertical_margin" />
 
  <android.support.v7.widget.AppCompatButton
