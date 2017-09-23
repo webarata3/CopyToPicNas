@@ -23,7 +23,7 @@ public class MainActivityFragment extends Fragment
 
     private AppCompatTextView fromDirTextView;
     private AppCompatButton selectDirButton;
-    private AppCompatTextView dirInfo;
+    private AppCompatTextView dirInfoTextView;
 
     private TextInputLayout ipTextInputLayout;
     private TextInputEditText ipEditText;
@@ -53,7 +53,7 @@ public class MainActivityFragment extends Fragment
 
         fromDirTextView = (AppCompatTextView) fragment.findViewById(R.id.fromDirTextView);
 
-        dirInfo = (AppCompatTextView) fragment.findViewById(R.id.dirInfo);
+        dirInfoTextView = (AppCompatTextView) fragment.findViewById(R.id.dirInfoTextView);
 
         ipTextInputLayout = (TextInputLayout) fragment.findViewById(R.id.ipTextInputLayout);
         ipEditText = (TextInputEditText) fragment.findViewById(R.id.ipEditText);
@@ -99,17 +99,19 @@ public class MainActivityFragment extends Fragment
         selectDirDialogFragment.show(getFragmentManager(), "");
     }
 
-    private Long calcDirSize() {
+    private void calcDirSize() {
         File file = new File(fromDirTextView.getText().toString());
 
         if (!file.exists()) {
-            fromDirTextView.setText("ディレクトリが存在しません");
-            return 0L;
+            dirInfoTextView.setText("ディレクトリが存在しません");
+            return;
         }
         if (!file.isDirectory()) {
-            fromDirTextView.setText("ディレクトリではありません");
-            return 0L;
+            dirInfoTextView.setText("ディレクトリではありません");
+            return;
         }
+
+        dirInfoTextView.setText("ディレクトリーサイズ計算中");
 
         File[] files = file.listFiles();
         int fileCount = 0;
@@ -125,10 +127,8 @@ public class MainActivityFragment extends Fragment
                 }
             }
         }
-        dirInfo.setText(String.format("ファイル数: %1$d サイズ: %2$s",
+        dirInfoTextView.setText(String.format("ファイル数: %1$d サイズ: %2$s",
             fileCount, FileUtil.getDisplayFileSize(fileSize)));
-
-        return fileSize;
     }
 
     @Override

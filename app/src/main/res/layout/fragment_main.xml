@@ -18,7 +18,7 @@
    android:hint="@string/label.from_dir" />
 
  <android.support.v7.widget.AppCompatTextView
-  android:id="@+id/dirInfo"
+  android:id="@+id/dirInfoTextView"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:layout_below="@+id/fromDirTextView"
@@ -28,7 +28,7 @@
   android:id="@+id/selectDirButton"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_below="@+id/dirInfo"
+  android:layout_below="@+id/dirInfoTextView"
   android:layout_centerHorizontal="true"
   android:text="@string/select_from_dir" />
 
